@@ -237,8 +237,6 @@ spec:
             - alarmActions
             - dimensions
             - evaluationPeriod
-            - metricName
-            - metrics
             - name
             - namespace
             - numDataPointsToAlarm
@@ -257,8 +255,6 @@ spec:
                 type: string
             required:
             - configured
-            - error
-            - errorMessage
             type: object
         type: object
     served: true

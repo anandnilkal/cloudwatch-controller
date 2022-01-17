@@ -60,11 +60,11 @@ type AlarmsSpec struct {
 	InsufficientDataActions []string `json:"insufficientDataActions,omitempty"`
 
 	// MetricName name for the metric associated with the alarm.
-	MetricName *string `json:"metricName"`
+	MetricName *string `json:"metricName,omitempty"`
 
 	// Metrics An array of MetricDataQuery structures that enable you to create an alarm based
 	// on the result of a metric math expression.
-	Metrics []MetricDataQuery `json:"metrics"`
+	Metrics []MetricDataQuery `json:"metrics,omitempty"`
 
 	// The namespace for the metric associated specified in MetricName.
 	Namespace *string `json:"namespace"`
@@ -103,8 +103,8 @@ type AlarmsStatus struct {
 	// Important: Run "make" to regenerate code after modifying this file
 
 	Configured  bool    `json:"configured"`
-	Error       *string `json:"error"`
-	ErroMessage *string `json:"errorMessage"`
+	Error       *string `json:"error,omitempty"`
+	ErroMessage *string `json:"errorMessage,omitempty"`
 }
 
 //+kubebuilder:object:root=true

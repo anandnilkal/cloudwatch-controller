@@ -5,33 +5,36 @@ metadata:
 spec:
   # TODO(user): Add fields here
   name: alarms-sample
-  operator: "test"
-  evaluationPeriod: 10
+  operator: "GreaterThanThreshold"
+  evaluationPeriod: 5
   alarmActions:
-  - test
-  description: "test"
-  numDataPointsToAlarm: 10
+    - arn:aws:sns:us-west-2:374188005532:OpsGenie-alerts
+  description: "test alarm creation"
+  numDataPointsToAlarm: 5
   dimensions:
-  - name: test
-    value: test
-  metricName: test
-  metrics:
-  - id: test
-    accountId: test
-    expression: test
-    label: test
-    returnData: true
-    period: 10
-    metricStat:
-      period: 10
-      stat: test
-      unit: test
-      metric:
-        dimensions:
-        - name: test
-          value: test
-        metricName: test
-        namespace: test
-  namespace: test
-  period: 10
+  - name: QueueName
+    value: cloud-systems-Alert-Listener-Queue
+  metricName: ApproximateNumberOfMessagesNotVisible
+  statistics: Average
+    #okActions:
+    #- arn:aws:sns:us-west-2:374188005532:OpsGenie-alerts
+    #metrics:
+    #- id: test
+    #accountId: test
+    #expression: test
+    #label: test
+    #returnData: true
+    #period: 10
+    #metricStat:
+    #  period: 10
+    #  stat: test
+    #  unit: test
+    #  metric:
+    #    dimensions:
+    #    - name: test
+    #      value: test
+    #    metricName: test
+    #    namespace: test
+  namespace: AWS/SQS
+  period: 60
   threshold: 10

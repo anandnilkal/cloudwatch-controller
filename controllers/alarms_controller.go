@@ -56,18 +56,38 @@ func (r *AlarmsReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 
 	var alarm cloudwatchv1alpha1.Alarms
 	err := r.Get(ctx, req.NamespacedName, &alarm)
-	if err != nil && errors.IsNotFound(err) {
-		logger.Error(err, fmt.Sprintf("error (%s)", err.Error()))
+	if err != nil {
+		if !errors.IsNotFound(err) {
+			logger.Error(err, fmt.Sprintf("error (%s)", err.Error()))
+			return ctrl.Result{}, nil
+		}
+		requeue, _ := manager.CheckAndCleanupAlarm(ctx, req.NamespacedName.Name, req.NamespacedName.Namespace)
+		if requeue {
+			return ctrl.Result{Requeue: requeue}, nil
+		}
 		return ctrl.Result{}, nil
 	}
 
 	err = manager.CreateCloudwatchAlarm(ctx, &alarm)
 	if err != nil {
-		logger.Error(err, "failed: %s", err)
+		logger.Error(err, fmt.Sprintf("failed: %s", err))
+		errmessage := err.Error()
+		alarm.Status.Configured = false
+		alarm.Status.Error = &errmessage
+		alarm.Status.ErroMessage = &errmessage
+		err = r.Status().Update(ctx, &alarm)
+		if err != nil {
+			logger.Error(err, fmt.Sprintf("Status update failed: %s", err))
+		}
 		return ctrl.Result{Requeue: true}, err
 	}
-	logger.V(0).Info(fmt.Sprintf("alarm : %+v", alarm))
 
+	alarm.Status.Configured = true
+	err = r.Status().Update(ctx, &alarm)
+	if err != nil {
+		logger.Error(err, fmt.Sprintf("Status update failed: %s", err))
+		return ctrl.Result{Requeue: true}, nil
+	}
 	return ctrl.Result{}, nil
 }
 
