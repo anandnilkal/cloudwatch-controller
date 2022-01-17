@@ -1,0 +1,273 @@
+
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.7.0
+  creationTimestamp: null
+  name: alarms.cloudwatch.anandnilkal.io
+spec:
+  group: cloudwatch.anandnilkal.io
+  names:
+    kind: Alarms
+    listKind: AlarmsList
+    plural: alarms
+    singular: alarms
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: Alarms is the Schema for the alarms API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: AlarmsSpec defines the desired state of Alarms
+            properties:
+              alarmActions:
+                description: AlarmActions action to take when alarm is generated
+                items:
+                  type: string
+                type: array
+              description:
+                description: AlarmDescription description for the alarm.
+                type: string
+              dimensions:
+                description: Dimensions dimensions for the metric specified in MetricName.
+                items:
+                  properties:
+                    name:
+                      description: Name name of the dimension
+                      type: string
+                    value:
+                      description: Value of the dimension
+                      type: string
+                  required:
+                  - name
+                  - value
+                  type: object
+                type: array
+              evaluateLowSampleCountPercentile:
+                description: 'EvaluateLowSampleCountPercentile Used only for alarms
+                  based on percentiles. Valid Values: evaluate | ignore'
+                type: string
+              evaluationPeriod:
+                description: EvaluationPeriod number of period over which alarm data
+                  is compared to threshold value
+                format: int32
+                type: integer
+              extendedStatistic:
+                description: ExtendedStatistic The percentile statistic for the metric
+                  specified in MetricName.
+                type: string
+              insufficientDataActions:
+                description: InsufficentDataActions The actions to execute when this
+                  alarm transitions to the INSUFFICIENT_DATA
+                items:
+                  type: string
+                type: array
+              metricName:
+                description: MetricName name for the metric associated with the alarm.
+                type: string
+              metrics:
+                description: Metrics An array of MetricDataQuery structures that enable
+                  you to create an alarm based on the result of a metric math expression.
+                items:
+                  properties:
+                    accountId:
+                      description: AccountId ID of the account where the metrics are
+                        located
+                      type: string
+                    expression:
+                      description: Expression math expression to be performed on the
+                        returned data, if this object is performing a math expression.
+                      type: string
+                    id:
+                      description: Id short name
+                      type: string
+                    label:
+                      description: Label human-readable label for this metric or expression.
+                      type: string
+                    metricStat:
+                      description: MetricStat The metric to be returned, along with
+                        statistics, period, and units.
+                      properties:
+                        metric:
+                          description: The metric to return, including the metric
+                            name, namespace, and dimensions.
+                          properties:
+                            dimensions:
+                              description: The dimensions for the metric.
+                              items:
+                                properties:
+                                  name:
+                                    description: Name name of the dimension
+                                    type: string
+                                  value:
+                                    description: Value of the dimension
+                                    type: string
+                                required:
+                                - name
+                                - value
+                                type: object
+                              type: array
+                            metricName:
+                              description: The name of the metric. This is a required
+                                field.
+                              type: string
+                            namespace:
+                              description: The namespace of the metric.
+                              type: string
+                          required:
+                          - dimensions
+                          - metricName
+                          - namespace
+                          type: object
+                        period:
+                          description: The granularity, in seconds, of the returned
+                            data points.
+                          format: int32
+                          type: integer
+                        stat:
+                          description: The statistic to return. It can include any
+                            CloudWatch statistic or extended statistic.
+                          type: string
+                        unit:
+                          description: When you are using a Put operation, this defines
+                            what unit you want to use when storing the metric.
+                          type: string
+                      required:
+                      - metric
+                      - period
+                      - stat
+                      - unit
+                      type: object
+                    period:
+                      description: Period The granularity, in seconds, of the returned
+                        data points.
+                      format: int32
+                      type: integer
+                    returnData:
+                      description: ReturnData When used in GetMetricData, this option
+                        indicates whether to return the timestamps and raw data values
+                        of this metric.
+                      type: boolean
+                  required:
+                  - accountId
+                  - expression
+                  - id
+                  - label
+                  - metricStat
+                  - period
+                  - returnData
+                  type: object
+                type: array
+              name:
+                description: Name name of the Alarm to be created
+                type: string
+              namespace:
+                description: The namespace for the metric associated specified in
+                  MetricName.
+                type: string
+              numDataPointsToAlarm:
+                description: DatapointsToAlarm number of data points that must be
+                  breaching to trigger the alarm. This is
+                format: int32
+                type: integer
+              okActions:
+                description: OKActions The actions to execute when this alarm transitions
+                  to an OK state from any other state.
+                items:
+                  type: string
+                type: array
+              operator:
+                description: ComparisonOperator comparison operator used for deciding
+                  alarm status
+                type: string
+              period:
+                description: Period The length, in seconds, used each time the metric
+                  specified in MetricName is evaluated. Valid values are 10, 30, and
+                  any multiple of 60.
+                format: int32
+                type: integer
+              statistics:
+                description: Statistic The statistic for the metric specified in MetricName.
+                type: string
+              tags:
+                description: A list of key-value pairs to associate with the alarm.
+                items:
+                  properties:
+                    key:
+                      description: Key string that you can use to assign a value.
+                      type: string
+                    value:
+                      description: Value for the specified tag key.
+                      type: string
+                  required:
+                  - key
+                  - value
+                  type: object
+                type: array
+              threshold:
+                description: The value against which the specified statistic is compared.
+              thresholdMetricId:
+                description: ThreshouldMetricId If this is an alarm based on an anomaly
+                  detection model.
+                type: string
+              treatMissingData:
+                description: 'TreatMissingData Sets how this alarm is to handle missing
+                  data points. Valid Values: breaching | notBreaching | ignore | missing'
+                type: string
+              unit:
+                description: Unit The unit of measure for the statistic.
+                type: string
+            required:
+            - alarmActions
+            - dimensions
+            - evaluationPeriod
+            - metricName
+            - metrics
+            - name
+            - namespace
+            - numDataPointsToAlarm
+            - operator
+            - period
+            - threshold
+            type: object
+          status:
+            description: AlarmsStatus defines the observed state of Alarms
+            properties:
+              configured:
+                type: boolean
+              error:
+                type: string
+              errorMessage:
+                type: string
+            required:
+            - configured
+            - error
+            - errorMessage
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []

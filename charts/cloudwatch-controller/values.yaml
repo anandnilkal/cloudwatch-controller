@@ -1,0 +1,6 @@
+ replicaCount: 1
+
+ image:
+   repository: 374188005532.dkr.ecr.us-west-2.amazonaws.com/nileglobalsw/cloudwatch-controller
+   tag: 0.0.1
+   pullPolicy: Always

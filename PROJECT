@@ -1,0 +1,16 @@
+domain: anandnilkal.io
+layout:
+- go.kubebuilder.io/v3
+projectName: cloudwatch-controller
+repo: github.com/anandnilkal/cloudwatch-controller
+resources:
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: anandnilkal.io
+  group: cloudwatch
+  kind: Alarms
+  path: github.com/anandnilkal/cloudwatch-controller/api/v1alpha1
+  version: v1alpha1
+version: "3"

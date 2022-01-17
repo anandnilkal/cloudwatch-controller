@@ -1,0 +1,37 @@
+apiVersion: cloudwatch.anandnilkal.io/v1alpha1
+kind: Alarms
+metadata:
+  name: alarms-sample
+spec:
+  # TODO(user): Add fields here
+  name: alarms-sample
+  operator: "test"
+  evaluationPeriod: 10
+  alarmActions:
+  - test
+  description: "test"
+  numDataPointsToAlarm: 10
+  dimensions:
+  - name: test
+    value: test
+  metricName: test
+  metrics:
+  - id: test
+    accountId: test
+    expression: test
+    label: test
+    returnData: true
+    period: 10
+    metricStat:
+      period: 10
+      stat: test
+      unit: test
+      metric:
+        dimensions:
+        - name: test
+          value: test
+        metricName: test
+        namespace: test
+  namespace: test
+  period: 10
+  threshold: 10
