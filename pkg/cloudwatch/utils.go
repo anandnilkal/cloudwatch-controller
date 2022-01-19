@@ -104,7 +104,7 @@ func (c *CloudwatchClient) populateAlarmInput(alarm *cloudwatchv1alpha1.Alarms) 
 		putMetricAlarmInput.MetricName = alarm.Spec.MetricName
 	}
 	if len(alarm.Spec.Metrics) != 0 {
-		for i, _ := range alarm.Spec.Metrics {
+		for i := range alarm.Spec.Metrics {
 			var metricStat cloudwatchtypes.MetricStat
 			if alarm.Spec.Metrics[i].MetricStat != nil {
 				if alarm.Spec.Metrics[i].MetricStat.Metric != nil {
@@ -115,7 +115,7 @@ func (c *CloudwatchClient) populateAlarmInput(alarm *cloudwatchv1alpha1.Alarms) 
 					if alarm.Spec.Metrics[i].MetricStat.Metric.Namespace != nil {
 						metricStat.Metric.Namespace = alarm.Spec.Metrics[i].MetricStat.Metric.Namespace
 					}
-					for j, _ := range alarm.Spec.Metrics[i].MetricStat.Metric.Dimensions {
+					for j := range alarm.Spec.Metrics[i].MetricStat.Metric.Dimensions {
 						metricStat.Metric.Dimensions = append(metricStat.Metric.Dimensions, cloudwatchtypes.Dimension{
 							Name:  alarm.Spec.Metrics[i].MetricStat.Metric.Dimensions[j].Name,
 							Value: alarm.Spec.Metrics[i].MetricStat.Metric.Dimensions[j].Value,
@@ -159,7 +159,7 @@ func (c *CloudwatchClient) populateAlarmInput(alarm *cloudwatchv1alpha1.Alarms) 
 		putMetricAlarmInput.Statistic = getStatistic(string(alarm.Spec.Statistic))
 	}
 	if len(alarm.Spec.Tags) != 0 {
-		for i, _ := range alarm.Spec.Tags {
+		for i := range alarm.Spec.Tags {
 			putMetricAlarmInput.Tags = append(putMetricAlarmInput.Tags, cloudwatchtypes.Tag{
 				Key:   alarm.Spec.Tags[i].Key,
 				Value: alarm.Spec.Tags[i].Value,
