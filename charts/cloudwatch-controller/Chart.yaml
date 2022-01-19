@@ -1,4 +1,0 @@
-apiVersion: v2
-description: A helm chart for cloudwatch controller
-name: cloudwatch-controller
-version: 0.0.1
