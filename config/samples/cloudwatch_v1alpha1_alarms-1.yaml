@@ -1,0 +1,41 @@
+apiVersion: cloudwatch.anandnilkal.io/v1alpha1
+kind: Alarms
+metadata:
+  name: samle-alarm-1
+spec:
+  # TODO(user): Add fields here
+  name: samle-alarm-1
+  operator: "GreaterThanThreshold"
+  evaluationPeriod: 5
+  numDataPointsToAlarm: 5
+  alarmActions:
+    - arn:aws:sns:us-west-2:374188005532:OpsGenie-alerts
+  description: "test alarm creation"
+  metrics:
+  - id: e1
+    expression: m1+m2
+    label: e1
+    returnData: true
+  - id: m1  
+    returnData: false
+    metricStat:
+      period: 60
+      stat: Average
+      metric:
+        dimensions:
+        - name: StreamName
+          value: cl-e2e-bssids-wips-stream
+        metricName: BufferingTime
+        namespace: KinesisProducerLibrary
+  - id: m2  
+    returnData: false
+    metricStat:
+      period: 60
+      stat: Average
+      metric:
+        dimensions:
+        - name: StreamName
+          value: cl-e2e-bssids-wips-stream
+        metricName: BufferingTime
+        namespace: KinesisProducerLibrary
+  threshold: 10

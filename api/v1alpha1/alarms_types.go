@@ -48,7 +48,7 @@ type AlarmsSpec struct {
 	DatapointsToAlarm *int32 `json:"numDataPointsToAlarm"`
 
 	// Dimensions dimensions for the metric specified in MetricName.
-	Dimensions []Dimension `json:"dimensions"`
+	Dimensions []Dimension `json:"dimensions,omitempty"`
 
 	// EvaluateLowSampleCountPercentile Used only for alarms based on percentiles. Valid Values: evaluate | ignore
 	EvaluateLowSampleCountPercentile *string `json:"evaluateLowSampleCountPercentile,omitempty"`
@@ -67,7 +67,7 @@ type AlarmsSpec struct {
 	Metrics []MetricDataQuery `json:"metrics,omitempty"`
 
 	// The namespace for the metric associated specified in MetricName.
-	Namespace *string `json:"namespace"`
+	Namespace *string `json:"namespace,omitempty"`
 
 	// OKActions The actions to execute when this alarm transitions to an OK state from any other
 	// state.
@@ -75,7 +75,7 @@ type AlarmsSpec struct {
 
 	// Period The length, in seconds, used each time the metric specified in MetricName is
 	// evaluated. Valid values are 10, 30, and any multiple of 60.
-	Period *int32 `json:"period"`
+	Period *int32 `json:"period,omitempty"`
 
 	// Statistic The statistic for the metric specified in MetricName.
 	Statistic cloudwatchtypes.Statistic `json:"statistics,omitempty"`

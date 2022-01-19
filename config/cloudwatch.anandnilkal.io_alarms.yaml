@@ -152,7 +152,6 @@ spec:
                       - metric
                       - period
                       - stat
-                      - unit
                       type: object
                     period:
                       description: Period The granularity, in seconds, of the returned
@@ -165,12 +164,7 @@ spec:
                         of this metric.
                       type: boolean
                   required:
-                  - accountId
-                  - expression
                   - id
-                  - label
-                  - metricStat
-                  - period
                   - returnData
                   type: object
                 type: array
@@ -235,13 +229,10 @@ spec:
                 type: string
             required:
             - alarmActions
-            - dimensions
             - evaluationPeriod
             - name
-            - namespace
             - numDataPointsToAlarm
             - operator
-            - period
             - threshold
             type: object
           status:

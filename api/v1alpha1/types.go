@@ -45,7 +45,7 @@ type MetricStat struct {
 	Stat *string `json:"stat"`
 
 	// When you are using a Put operation, this defines what unit you want to use when storing the metric.
-	Unit cloudwatchtypes.StandardUnit `json:"unit"`
+	Unit cloudwatchtypes.StandardUnit `json:"unit,omitempty"`
 }
 
 type MetricDataQuery struct {
@@ -54,19 +54,19 @@ type MetricDataQuery struct {
 	Id *string `json:"id"`
 
 	// AccountId ID of the account where the metrics are located
-	AccountId *string `json:"accountId"`
+	AccountId *string `json:"accountId,omitempty"`
 
 	// Expression math expression to be performed on the returned data, if this object is performing a math expression.
-	Expression *string `json:"expression"`
+	Expression *string `json:"expression,omitempty"`
 
 	// Label human-readable label for this metric or expression.
-	Label *string `json:"label"`
+	Label *string `json:"label,omitempty"`
 
 	// MetricStat The metric to be returned, along with statistics, period, and units.
-	MetricStat *MetricStat `json:"metricStat"`
+	MetricStat *MetricStat `json:"metricStat,omitempty"`
 
 	// Period The granularity, in seconds, of the returned data points.
-	Period *int32 `json:"period"`
+	Period *int32 `json:"period,omitempty"`
 
 	// ReturnData When used in GetMetricData, this option indicates whether to return the
 	// timestamps and raw data values of this metric.

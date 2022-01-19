@@ -26,6 +26,8 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
+	"sigs.k8s.io/controller-runtime/pkg/predicate"
+
 	cloudwatchv1alpha1 "github.com/anandnilkal/cloudwatch-controller/api/v1alpha1"
 	"github.com/anandnilkal/cloudwatch-controller/pkg/manager"
 )
@@ -68,6 +70,11 @@ func (r *AlarmsReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 		return ctrl.Result{}, nil
 	}
 
+	// logger.V(0).Info(fmt.Sprintf("alarm data: %+v", alarm))
+
+	if alarm.Status.Configured {
+		return ctrl.Result{}, nil
+	}
 	err = manager.CreateCloudwatchAlarm(ctx, &alarm)
 	if err != nil {
 		logger.Error(err, fmt.Sprintf("failed: %s", err))
@@ -100,6 +107,6 @@ func (r *AlarmsReconciler) SetupWithManager(mgr ctrl.Manager) error {
 		return err
 	}
 	return ctrl.NewControllerManagedBy(mgr).
-		For(&cloudwatchv1alpha1.Alarms{}).
+		For(&cloudwatchv1alpha1.Alarms{}).WithEventFilter(predicate.GenerationChangedPredicate{}).
 		Complete(r)
 }
