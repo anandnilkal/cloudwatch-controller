@@ -25,7 +25,7 @@ CloudWatch controller supports following features
    numDataPointsToAlarm: 5
    dimensions:
    - name: QueueName
-     value: cloud-systems-Alert-Listener-Queue
+     value: cloud-Queue
    metricName: ApproximateNumberOfMessagesNotVisible
    statistics: Average
    namespace: AWS/SQS
@@ -57,10 +57,9 @@ CloudWatch controller supports following features
 apiVersion: cloudwatch.anandnilkal.io/v1alpha1
 kind: Alarms
 metadata:
-  name: samle-alarm-1
+  name: sample-alarm-1
 spec:
-  # TODO(user): Add fields here
-  name: samle-alarm-1
+  name: sample-alarm-1
   operator: "GreaterThanThreshold"
   evaluationPeriod: 5
   numDataPointsToAlarm: 5
@@ -80,7 +79,7 @@ spec:
       metric:
         dimensions:
         - name: StreamName
-          value: cl-e2e-bssids-wips-stream
+          value: stream-1
         metricName: BufferingTime
         namespace: KinesisProducerLibrary
   - id: m2
@@ -91,7 +90,7 @@ spec:
       metric:
         dimensions:
         - name: StreamName
-          value: cl-e2e-bssids-wips-stream
+          value: stream-2
         metricName: BufferingTime
         namespace: KinesisProducerLibrary
   threshold: 10
