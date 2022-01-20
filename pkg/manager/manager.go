@@ -9,6 +9,7 @@ import (
 
 	cloudwatchv1alpha1 "github.com/anandnilkal/cloudwatch-controller/api/v1alpha1"
 	cloudwatchmanager "github.com/anandnilkal/cloudwatch-controller/pkg/cloudwatch"
+	cloudwatch "github.com/aws/aws-sdk-go-v2/service/cloudwatch"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 )
 
@@ -33,6 +34,24 @@ func CreateCloudwatchAlarm(ctx context.Context, alarm *cloudwatchv1alpha1.Alarms
 	if err != nil {
 		logger.Error(err, fmt.Sprintf("CloudWatch Alarm Creation failed: %s", alarm.Spec.Name))
 		return err
+	}
+
+	var alarmDescription *cloudwatch.DescribeAlarmsOutput
+	alarmDescription, err = clientManager.cloudwatchClient.DescribeCloudwatchAlarm(ctx, alarm.Name)
+	if err != nil {
+		logger.Error(err, fmt.Sprintf("Cloudwatch Alarm describe failed: %s", alarm.Spec.Name))
+		return err
+	}
+
+	if len(alarmDescription.MetricAlarms) != 0 {
+		for _, alarmOut := range alarmDescription.MetricAlarms {
+			alarmArn := alarmOut.AlarmArn
+			_, err := clientManager.cloudwatchClient.TagAlarmResource(ctx, *alarmArn, alarm.Spec.Tags)
+			if err != nil {
+				logger.Error(err, fmt.Sprintf("Cloudwatch alarm resource tagging failed: %s", alarm.Spec.Name))
+				return err
+			}
+		}
 	}
 
 	logger.V(0).Info(fmt.Sprintf("CloudWatch Alarm created: %s", alarm.Spec.Name))

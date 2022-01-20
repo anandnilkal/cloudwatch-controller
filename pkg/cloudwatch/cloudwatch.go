@@ -6,6 +6,7 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatch"
+	cloudwatchtypes "github.com/aws/aws-sdk-go-v2/service/cloudwatch/types"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
 	cloudwatchv1alpha1 "github.com/anandnilkal/cloudwatch-controller/api/v1alpha1"
@@ -39,6 +40,7 @@ func (c *CloudwatchClient) CreateCloudwatchAlarm(ctx context.Context, alarm *clo
 		return nil, err
 	}
 
+	logger.V(0).Info(fmt.Sprintf("tags : %+v", putMetricAlarmInput.Tags))
 	return c.Client.PutMetricAlarm(ctx, putMetricAlarmInput)
 }
 
@@ -53,5 +55,19 @@ func (c *CloudwatchClient) DeleteCloudwatchAlarm(ctx context.Context, name strin
 func (c *CloudwatchClient) DescribeCloudwatchAlarm(ctx context.Context, name string) (*cloudwatch.DescribeAlarmsOutput, error) {
 	return c.Client.DescribeAlarms(ctx, &cloudwatch.DescribeAlarmsInput{
 		AlarmNames: []string{name},
+	})
+}
+
+func (c *CloudwatchClient) TagAlarmResource(ctx context.Context, arn string, tags []cloudwatchv1alpha1.Tag) (*cloudwatch.TagResourceOutput, error) {
+	var resourceTags []cloudwatchtypes.Tag
+	for i := range tags {
+		resourceTags = append(resourceTags, cloudwatchtypes.Tag{
+			Key:   tags[i].Key,
+			Value: tags[i].Value,
+		})
+	}
+	return c.Client.TagResource(ctx, &cloudwatch.TagResourceInput{
+		ResourceARN: &arn,
+		Tags:        resourceTags,
 	})
 }

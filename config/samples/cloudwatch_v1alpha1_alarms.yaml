@@ -16,25 +16,11 @@ spec:
     value: cloud-systems-Alert-Listener-Queue
   metricName: ApproximateNumberOfMessagesNotVisible
   statistics: Average
-    #okActions:
-    #- arn:aws:sns:us-west-2:374188005532:OpsGenie-alerts
-    #metrics:
-    #- id: test
-    #accountId: test
-    #expression: test
-    #label: test
-    #returnData: true
-    #period: 10
-    #metricStat:
-    #  period: 10
-    #  stat: test
-    #  unit: test
-    #  metric:
-    #    dimensions:
-    #    - name: test
-    #      value: test
-    #    metricName: test
-    #    namespace: test
   namespace: AWS/SQS
   period: 60
   threshold: 10
+  tags:
+  - key: release
+    value: test
+  - key: namespace
+    value: dev-group6
