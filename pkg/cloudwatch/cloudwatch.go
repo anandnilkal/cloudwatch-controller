@@ -40,7 +40,6 @@ func (c *CloudwatchClient) CreateCloudwatchAlarm(ctx context.Context, alarm *clo
 		return nil, err
 	}
 
-	logger.V(0).Info(fmt.Sprintf("tags : %+v", putMetricAlarmInput.Tags))
 	return c.Client.PutMetricAlarm(ctx, putMetricAlarmInput)
 }
 
