@@ -79,18 +79,32 @@ func CreateCloudwatchAlarm(ctx context.Context, alarm *cloudwatchv1alpha1.Alarms
 
 }
 
-func CheckAndCleanupAlarm(ctx context.Context, name, namespace, region string) (bool, error) {
+func CheckAndCleanupAlarm(ctx context.Context, name, namespace string) (bool, error) {
 	logger := log.FromContext(ctx)
-	if _, ok := clientManager.ClientList[region]; !ok {
-		return false, errors.New("CloudWatch Client un-initialized")
-	}
-	_, err := clientManager.ClientList[region].DeleteCloudwatchAlarm(ctx, name)
-	if err != nil {
-		if jujuerrors.IsNotFound(err) {
-			return false, nil
+	for _, region := range Regions {
+		if _, ok := clientManager.ClientList[region]; !ok {
+			return false, errors.New("CloudWatch Client un-initialized")
 		}
-		return true, err
+		var alarmDescription *cloudwatch.DescribeAlarmsOutput
+		alarmDescription, err := clientManager.ClientList[region].DescribeCloudwatchAlarm(ctx, name)
+		if err != nil {
+			logger.Error(err, fmt.Sprintf("Cloudwatch Alarm describe failed: %s", name))
+			return true, err
+		}
+		if len(alarmDescription.MetricAlarms) == 0 {
+			continue
+		}
+		if len(alarmDescription.MetricAlarms) == 1 {
+			_, err = clientManager.ClientList[region].DeleteCloudwatchAlarm(ctx, name)
+			if err != nil {
+				if jujuerrors.IsNotFound(err) {
+					return false, nil
+				}
+				return true, err
+			}
+			logger.V(0).Info(fmt.Sprintf("Deleted CloudWatch Alarm: %s", name))
+			break
+		}
 	}
-	logger.V(0).Info(fmt.Sprintf("Deleted CloudWatch Alarm: %s", name))
-	return false, err
+	return false, nil
 }

@@ -4,12 +4,12 @@ metadata:
   name: alarms-sample
 spec:
   # TODO(user): Add fields here
-  region: us-west-2
+  region: us-east-1
   name: alarms-sample
   operator: "GreaterThanThreshold"
   evaluationPeriod: 5
-  alarmActions:
-    - arn:aws:sns:us-west-2:374188005532:OpsGenie-alerts
+  alarmActions: []
+    #  - arn:aws:sns:us-west-2:374188005532:OpsGenie-alerts
   description: "test alarm creation"
   numDataPointsToAlarm: 5
   dimensions:

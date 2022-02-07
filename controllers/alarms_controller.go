@@ -67,11 +67,7 @@ func (r *AlarmsReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 			logger.Error(err, fmt.Sprintf("error (%s)", err.Error()))
 			return ctrl.Result{}, nil
 		}
-		region := "us-west-2"
-		if alarm.Spec.Region != nil && len(*alarm.Spec.Region) != 0 {
-			region = *alarm.Spec.Region
-		}
-		requeue, _ := manager.CheckAndCleanupAlarm(ctx, req.NamespacedName.Name, req.NamespacedName.Namespace, region)
+		requeue, _ := manager.CheckAndCleanupAlarm(ctx, req.NamespacedName.Name, req.NamespacedName.Namespace)
 		if requeue {
 			return ctrl.Result{Requeue: requeue}, nil
 		}
