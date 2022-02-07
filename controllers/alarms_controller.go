@@ -56,6 +56,10 @@ func (r *AlarmsReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 
 	// TODO(user): your logic here
 
+	if !manager.Initialized() {
+		return ctrl.Result{Requeue: true}, nil
+	}
+
 	var alarm cloudwatchv1alpha1.Alarms
 	err := r.Get(ctx, req.NamespacedName, &alarm)
 	if err != nil {

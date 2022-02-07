@@ -18,6 +18,7 @@ type ClientManager struct {
 }
 
 var clientManager ClientManager
+var initialized bool
 
 // Regions currently able to create alarms at
 var Regions = []string{"us-east-1", "us-west-2"}
@@ -32,7 +33,12 @@ func Initialization() error {
 		}
 		clientManager.ClientList[region] = client
 	}
+	initialized = true
 	return err
+}
+
+func Initialized() bool {
+	return initialized
 }
 
 func CreateCloudwatchAlarm(ctx context.Context, alarm *cloudwatchv1alpha1.Alarms) error {
