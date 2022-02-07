@@ -196,6 +196,9 @@ spec:
                   any multiple of 60.
                 format: int32
                 type: integer
+              region:
+                description: Region of the cloudwatch alarm
+                type: string
               statistics:
                 description: Statistic The statistic for the metric specified in MetricName.
                 type: string
@@ -234,6 +237,7 @@ spec:
             - name
             - numDataPointsToAlarm
             - operator
+            - region
             - threshold
             type: object
           status:

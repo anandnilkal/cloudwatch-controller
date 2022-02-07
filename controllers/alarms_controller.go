@@ -63,7 +63,7 @@ func (r *AlarmsReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctr
 			logger.Error(err, fmt.Sprintf("error (%s)", err.Error()))
 			return ctrl.Result{}, nil
 		}
-		requeue, _ := manager.CheckAndCleanupAlarm(ctx, req.NamespacedName.Name, req.NamespacedName.Namespace)
+		requeue, _ := manager.CheckAndCleanupAlarm(ctx, req.NamespacedName.Name, req.NamespacedName.Namespace, *alarm.Spec.Region)
 		if requeue {
 			return ctrl.Result{Requeue: requeue}, nil
 		}

@@ -1,10 +1,11 @@
 apiVersion: cloudwatch.anandnilkal.io/v1alpha1
 kind: Alarms
 metadata:
-  name: samle-alarm-1
+  name: sample-alarm-1
 spec:
   # TODO(user): Add fields here
-  name: samle-alarm-1
+  region: us-west-2
+  name: sample-alarm-1
   operator: "GreaterThanThreshold"
   evaluationPeriod: 5
   numDataPointsToAlarm: 5

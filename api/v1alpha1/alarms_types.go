@@ -95,6 +95,9 @@ type AlarmsSpec struct {
 
 	// Unit The unit of measure for the statistic.
 	Unit cloudwatchtypes.StandardUnit `json:"unit,omitempty"`
+
+	// Region of the cloudwatch alarm
+	Region *string `json:"region"`
 }
 
 // AlarmsStatus defines the observed state of Alarms

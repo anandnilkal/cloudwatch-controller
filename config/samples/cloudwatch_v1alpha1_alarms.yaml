@@ -4,6 +4,7 @@ metadata:
   name: alarms-sample
 spec:
   # TODO(user): Add fields here
+  region: us-west-2
   name: alarms-sample
   operator: "GreaterThanThreshold"
   evaluationPeriod: 5
