@@ -43,17 +43,21 @@ func Initialized() bool {
 
 func CreateCloudwatchAlarm(ctx context.Context, alarm *cloudwatchv1alpha1.Alarms) error {
 	logger := log.FromContext(ctx)
-	if _, ok := clientManager.ClientList[*alarm.Spec.Region]; !ok {
+	region := "us-west-2"
+	if alarm.Spec.Region != nil && len(*alarm.Spec.Region) != 0 {
+		region = *alarm.Spec.Region
+	}
+	if _, ok := clientManager.ClientList[region]; !ok {
 		return errors.New("CloudWatch Client un-initialized")
 	}
-	_, err := clientManager.ClientList[*alarm.Spec.Region].CreateCloudwatchAlarm(ctx, alarm)
+	_, err := clientManager.ClientList[region].CreateCloudwatchAlarm(ctx, alarm)
 	if err != nil {
 		logger.Error(err, fmt.Sprintf("CloudWatch Alarm Creation failed: %s", alarm.Spec.Name))
 		return err
 	}
 
 	var alarmDescription *cloudwatch.DescribeAlarmsOutput
-	alarmDescription, err = clientManager.ClientList[*alarm.Spec.Region].DescribeCloudwatchAlarm(ctx, alarm.Name)
+	alarmDescription, err = clientManager.ClientList[region].DescribeCloudwatchAlarm(ctx, alarm.Name)
 	if err != nil {
 		logger.Error(err, fmt.Sprintf("Cloudwatch Alarm describe failed: %s", alarm.Spec.Name))
 		return err
@@ -62,7 +66,7 @@ func CreateCloudwatchAlarm(ctx context.Context, alarm *cloudwatchv1alpha1.Alarms
 	if len(alarmDescription.MetricAlarms) != 0 {
 		for _, alarmOut := range alarmDescription.MetricAlarms {
 			alarmArn := alarmOut.AlarmArn
-			_, err := clientManager.ClientList[*alarm.Spec.Region].TagAlarmResource(ctx, *alarmArn, alarm.Spec.Tags)
+			_, err := clientManager.ClientList[region].TagAlarmResource(ctx, *alarmArn, alarm.Spec.Tags)
 			if err != nil {
 				logger.Error(err, fmt.Sprintf("Cloudwatch alarm resource tagging failed: %s", alarm.Spec.Name))
 				return err
